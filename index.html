@@ -747,7 +747,7 @@
                         <div class="node" onclick="showDetail('web-visit')">
                             <div class="node-box customer">
                                 <span class="node-icon">🌐</span>
-                                <span class="node-label">Customer Visits Website</span>
+                                <span class="node-label">Customer Visits Carey.com</span>
                             </div>
                         </div>
                         <span class="arrow">→</span>
@@ -761,11 +761,11 @@
                         <div class="node" onclick="showDetail('web-quote')">
                             <div class="node-box system">
                                 <span class="node-icon">⚡</span>
-                                <span class="node-label">System Generates Quote</span>
+                                <span class="node-label">Quote Generated</span>
                             </div>
                         </div>
                         <span class="arrow">→</span>
-                        <div class="node" onclick="showDetail('web-pay')">
+                        <div class="node" onclick="showDetail('web-book')">
                             <div class="node-box customer">
                                 <span class="node-icon">💳</span>
                                 <span class="node-label">Customer Pays & Books</span>
@@ -805,34 +805,34 @@
                         </div>
                     </div>
 
-                    <!-- Booking Platform Path -->
+                    <!-- GroundSpan Platform Path -->
                     <div class="flow-row">
-                        <div class="path-label">🖥️ Booking Platform</div>
-                        <div class="node" onclick="showDetail('groundspan-create')">
-                            <div class="node-box agent">
-                                <span class="node-icon">🖥️</span>
-                                <span class="node-label">Corporate Booker Creates Reservation</span>
+                        <div class="path-label">💼 GroundSpan</div>
+                        <div class="node" onclick="showDetail('groundspan-open')">
+                            <div class="node-box customer">
+                                <span class="node-icon">💻</span>
+                                <span class="node-label">Corporate Booker Opens GroundSpan</span>
                             </div>
                         </div>
                         <span class="arrow">→</span>
-                        <div class="node" onclick="showDetail('groundspan-transmit')">
-                            <div class="node-box system">
-                                <span class="node-icon">📡</span>
-                                <span class="node-label">Reservation Transmitted to Carey</span>
+                        <div class="node" onclick="showDetail('groundspan-details')">
+                            <div class="node-box customer">
+                                <span class="node-icon">📝</span>
+                                <span class="node-label">Enters Trip Details</span>
                             </div>
                         </div>
                         <span class="arrow">→</span>
-                        <div class="node" onclick="showDetail('groundspan-booking')">
+                        <div class="node" onclick="showDetail('groundspan-quote')">
                             <div class="node-box system">
-                                <span class="node-icon">📁</span>
-                                <span class="node-label">Booking Created in CES</span>
+                                <span class="node-icon">⚡</span>
+                                <span class="node-label">Quote Generated</span>
                             </div>
                         </div>
                         <span class="arrow">→</span>
-                        <div class="node" onclick="showDetail('groundspan-ack')">
-                            <div class="node-box system">
+                        <div class="node" onclick="showDetail('groundspan-book')">
+                            <div class="node-box customer">
                                 <span class="node-icon">✅</span>
-                                <span class="node-label">Acknowledgment Sent to GroundSpan</span>
+                                <span class="node-label">Customer Pays & Books</span>
                             </div>
                         </div>
                     </div>
@@ -1209,20 +1209,18 @@
             'agent-assist': { icon: '🎧', type: 'agent', title: 'Agent Captures Requirements', phase: 'Booking Initiation', desc: 'Reservation agent gathers all trip details from the customer.', actions: ['Capture pickup location & time', 'Record destination address', 'Note passenger count & names', 'Identify special requirements', 'Check vehicle preferences'], systems: ['CES'], roles: ['Reservation Agent'] },
             'agent-quote': { icon: '💰', type: 'agent', title: 'Agent Provides Quote', phase: 'Booking Initiation', desc: 'Agent calculates and presents pricing to customer.', actions: ['System calculates rate', 'Agent reviews pricing', 'Presents quote to customer', 'Explains inclusions/exclusions'], systems: ['CES', 'Pricing Engine'], roles: ['Reservation Agent'] },
             'phone-confirm': { icon: '✅', type: 'customer', title: 'Customer Confirms Booking', phase: 'Booking Initiation', desc: 'Customer verbally confirms the booking and provides payment.', actions: ['Customer agrees to quote', 'Provides payment method', 'Agent processes payment', 'Booking confirmed verbally'], systems: ['CES', 'Payment Gateway'], roles: ['Customer', 'Reservation Agent'] },
-            'web-visit': { icon: '🌐', type: 'customer', title: 'Customer Visits Website', phase: 'Booking Initiation', desc: 'Customer accesses Carey website to make a reservation.', actions: ['Navigate to carey.com', 'Click "Book Now"', 'Select service type'], systems: ['Website'], roles: ['Customer'] },
+            'groundspan-open': { icon: '💻', type: 'customer', title: 'Corporate Booker Opens GroundSpan', phase: 'Booking Initiation', desc: 'Corporate travel booker or arranger accesses the GroundSpan booking platform.', actions: ['Log into GroundSpan portal', 'Access corporate account', 'Navigate to new booking', 'View available options'], systems: ['GroundSpan'], roles: ['Corporate Booker', 'Travel Arranger'] },
+            'groundspan-details': { icon: '📝', type: 'customer', title: 'Enters Trip Details', phase: 'Booking Initiation', desc: 'Booker enters all trip information into GroundSpan.', actions: ['Enter pickup location & time', 'Enter destination address', 'Select passenger(s)', 'Choose vehicle type', 'Add special instructions'], systems: ['GroundSpan'], roles: ['Corporate Booker'] },
+            'groundspan-quote': { icon: '⚡', type: 'system', title: 'Quote Generated', phase: 'Booking Initiation', desc: 'GroundSpan automatically calculates and displays pricing based on corporate rates.', actions: ['Apply corporate rate agreement', 'Calculate distance & time', 'Check vehicle availability', 'Display quote with breakdown'], systems: ['GroundSpan', 'Pricing Engine'], roles: ['System'] },
+            'groundspan-book': { icon: '✅', type: 'customer', title: 'Customer Pays & Books', phase: 'Booking Initiation', desc: 'Booker confirms the reservation and completes payment via corporate billing.', actions: ['Review booking summary', 'Confirm trip details', 'Apply cost center/billing code', 'Submit booking'], systems: ['GroundSpan', 'CES', 'Corporate Billing'], roles: ['Corporate Booker'] },
+            'web-visit': { icon: '🌐', type: 'customer', title: 'Customer Visits Carey.com', phase: 'Booking Initiation', desc: 'Customer accesses Carey website to make a reservation.', actions: ['Navigate to carey.com', 'Click "Book Now"', 'Select service type'], systems: ['Website'], roles: ['Customer'] },
             'web-form': { icon: '📝', type: 'customer', title: 'Enters Trip Details', phase: 'Booking Initiation', desc: 'Customer fills out online booking form with trip information.', actions: ['Enter pickup address', 'Enter destination', 'Select date and time', 'Choose vehicle type', 'Add passenger details'], systems: ['Website', 'Booking Engine'], roles: ['Customer'] },
-            'web-quote': { icon: '⚡', type: 'system', title: 'System Generates Quote', phase: 'Booking Initiation', desc: 'System automatically calculates and displays pricing.', actions: ['Calculate distance/time', 'Apply rate rules', 'Check vehicle availability', 'Display quote to customer'], systems: ['Booking Engine', 'Pricing Engine'], roles: ['System'] },
-            'web-pay': { icon: '💳', type: 'customer', title: 'Customer Pays & Books', phase: 'Booking Initiation', desc: 'Customer completes payment and finalizes booking online.', actions: ['Review booking summary', 'Enter payment details', 'Submit payment', 'Receive confirmation'], systems: ['Payment Gateway', 'CES'], roles: ['Customer'] },
+            'web-quote': { icon: '⚡', type: 'system', title: 'Quote Generated', phase: 'Booking Initiation', desc: 'System automatically calculates and displays pricing.', actions: ['Calculate distance/time', 'Apply rate rules', 'Check vehicle availability', 'Display quote to customer'], systems: ['Booking Engine', 'Pricing Engine'], roles: ['System'] },
+            'web-book': { icon: '💳', type: 'customer', title: 'Customer Pays & Books', phase: 'Booking Initiation', desc: 'Customer completes payment and finalizes booking online.', actions: ['Review booking summary', 'Enter payment details', 'Submit payment', 'Receive confirmation'], systems: ['Payment Gateway', 'CES'], roles: ['Customer'] },
             'app-open': { icon: '📱', type: 'customer', title: 'Customer Opens App', phase: 'Booking Initiation', desc: 'Customer launches Carey mobile app to book a ride.', actions: ['Open Carey app', 'Log in or continue as guest', 'View booking options'], systems: ['Mobile App'], roles: ['Customer'] },
             'app-book': { icon: '📍', type: 'customer', title: 'Selects Pickup & Destination', phase: 'Booking Initiation', desc: 'Customer sets trip details in the app.', actions: ['Set pickup location (GPS or manual)', 'Enter destination', 'Select pickup time'], systems: ['Mobile App', 'Maps API'], roles: ['Customer'] },
             'app-vehicle': { icon: '🚗', type: 'system', title: 'Shows Vehicle Options', phase: 'Booking Initiation', desc: 'App displays available vehicle types and pricing.', actions: ['Query availability', 'Calculate rates', 'Show vehicle options', 'Display ETAs'], systems: ['Mobile App', 'CES'], roles: ['System'] },
             'app-confirm': { icon: '✅', type: 'customer', title: 'Confirms & Pays', phase: 'Booking Initiation', desc: 'Customer selects vehicle and completes booking.', actions: ['Select vehicle type', 'Review total', 'Confirm payment method', 'Submit booking'], systems: ['Mobile App', 'Payment Gateway'], roles: ['Customer'] },
-
-            // Booking Platform Path
-            'groundspan-create': { icon: '🖥️', type: 'agent', title: 'Corporate Booker Creates Reservation', phase: 'Booking Initiation', desc: 'Corporate travel manager or booker creates a reservation in GroundSpan platform.', actions: ['Log into GroundSpan', 'Enter trip details', 'Select vehicle type', 'Add passenger information', 'Submit reservation'], systems: ['GroundSpan'], roles: ['Corporate Booker', 'Travel Manager'] },
-            'groundspan-transmit': { icon: '📡', type: 'system', title: 'Reservation Transmitted to Carey', phase: 'Booking Initiation', desc: 'GroundSpan transmits the reservation data to Carey systems via API integration.', actions: ['Reservation data packaged', 'API call to Carey', 'Data validation', 'Transmission confirmed'], systems: ['GroundSpan', 'API Integration', 'CES'], roles: ['System'] },
-            'groundspan-booking': { icon: '📁', type: 'system', title: 'Booking Created in CES', phase: 'Booking Initiation', desc: 'Carey system receives and creates the booking in CES.', actions: ['Receive reservation data', 'Validate information', 'Create booking record', 'Assign confirmation number'], systems: ['CES'], roles: ['System'] },
-            'groundspan-ack': { icon: '✅', type: 'system', title: 'Acknowledgment Sent to GroundSpan', phase: 'Booking Initiation', desc: 'Carey sends confirmation acknowledgment back to GroundSpan.', actions: ['Generate acknowledgment', 'Include confirmation number', 'Transmit to GroundSpan', 'Update booking status'], systems: ['CES', 'API Integration', 'GroundSpan'], roles: ['System'] },
 
             // Phase 2: Post-Booking
             'res-created': { icon: '📁', type: 'system', title: 'Reservation Created in CES', phase: 'Post-Booking', desc: 'Booking is officially recorded in Carey Reservation System.', actions: ['Generate confirmation number', 'Store all trip details', 'Log payment info', 'Trigger confirmation workflow'], systems: ['CES'], roles: ['System'] },
