@@ -805,6 +805,38 @@
                         </div>
                     </div>
 
+                    <!-- Booking Platform Path -->
+                    <div class="flow-row">
+                        <div class="path-label">🖥️ Booking Platform</div>
+                        <div class="node" onclick="showDetail('groundspan-create')">
+                            <div class="node-box agent">
+                                <span class="node-icon">🖥️</span>
+                                <span class="node-label">Corporate Booker Creates Reservation</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('groundspan-transmit')">
+                            <div class="node-box system">
+                                <span class="node-icon">📡</span>
+                                <span class="node-label">Reservation Transmitted to Carey</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('groundspan-booking')">
+                            <div class="node-box system">
+                                <span class="node-icon">📁</span>
+                                <span class="node-label">Booking Created in CES</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('groundspan-ack')">
+                            <div class="node-box system">
+                                <span class="node-icon">✅</span>
+                                <span class="node-label">Acknowledgment Sent to GroundSpan</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Merge Point -->
                     <div class="flow-row centered" style="margin-top: 20px;">
                         <div class="merge-point">
@@ -832,7 +864,7 @@
                         <div class="node" onclick="showDetail('res-created')">
                             <div class="node-box system">
                                 <span class="node-icon">📁</span>
-                                <span class="node-label">Reservation Created in CRS</span>
+                                <span class="node-label">Reservation Created in CES</span>
                             </div>
                         </div>
                         <span class="arrow">→</span>
@@ -896,6 +928,13 @@
                                 <span class="node-label">Pre-Service Prep Complete</span>
                             </div>
                         </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('24hr-notify')">
+                            <div class="node-box system">
+                                <span class="node-icon">🔔</span>
+                                <span class="node-label">24-Hour Notification Sent</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -920,13 +959,6 @@
                             </div>
                         </div>
                         <span class="arrow">→</span>
-                        <div class="node" onclick="showDetail('customer-notified')">
-                            <div class="node-box system">
-                                <span class="node-icon">📱</span>
-                                <span class="node-label">Customer Notified (ETA)</span>
-                            </div>
-                        </div>
-                        <span class="arrow">→</span>
                         <div class="node" onclick="showDetail('driver-arrives')">
                             <div class="node-box driver">
                                 <span class="node-icon">📍</span>
@@ -934,10 +966,10 @@
                             </div>
                         </div>
                         <span class="arrow">→</span>
-                        <div class="node" onclick="showDetail('arrival-notify')">
+                        <div class="node" onclick="showDetail('on-location')">
                             <div class="node-box system">
-                                <span class="node-icon">🔔</span>
-                                <span class="node-label">Arrival Notification Sent</span>
+                                <span class="node-icon">📌</span>
+                                <span class="node-label">On Location</span>
                             </div>
                         </div>
                     </div>
@@ -1064,14 +1096,14 @@
             </div>
         </div>
 
-        <!-- Phase 5: Trip & Drop-off -->
+        <!-- Phase 5: Trip Execution & Drop-off -->
         <div class="phase">
             <div class="phase-card">
                 <div class="phase-header">
                     <div class="phase-number">5</div>
                     <div class="phase-info">
                         <h2>Trip Execution & Drop-off</h2>
-                        <p>Journey completion - process end point</p>
+                        <p>Journey to destination</p>
                     </div>
                 </div>
                 <div class="phase-content">
@@ -1098,9 +1130,53 @@
                         </div>
                         <span class="arrow">→</span>
                         <div class="node" onclick="showDetail('dropoff')">
-                            <div class="node-box endpoint">
+                            <div class="node-box driver">
                                 <span class="node-icon">🏁</span>
                                 <span class="node-label">Passenger Dropped Off</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 6: Billing -->
+        <div class="phase">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div class="phase-number">6</div>
+                    <div class="phase-info">
+                        <h2>Billing</h2>
+                        <p>Trip completion & invoicing</p>
+                    </div>
+                </div>
+                <div class="phase-content">
+                    <div class="flow-row">
+                        <div class="node" onclick="showDetail('eoj-entered')">
+                            <div class="node-box driver">
+                                <span class="node-icon">📝</span>
+                                <span class="node-label">EOJ Entered</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('invoice-generated')">
+                            <div class="node-box system">
+                                <span class="node-icon">🧾</span>
+                                <span class="node-label">Invoice Generated & Sent</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('payment-received')">
+                            <div class="node-box customer">
+                                <span class="node-icon">💳</span>
+                                <span class="node-label">Payment Received</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('trip-closed')">
+                            <div class="node-box endpoint">
+                                <span class="node-icon">🏁</span>
+                                <span class="node-label">Trip Closed</span>
                             </div>
                         </div>
                     </div>
@@ -1130,38 +1206,45 @@
         const steps = {
             // Phase 1: Booking Initiation
             'phone-call': { icon: '📞', type: 'customer', title: 'Customer Calls Reservation Line', phase: 'Booking Initiation', desc: 'Customer initiates booking by calling Carey\'s reservation hotline or VIP line.', actions: ['Customer dials reservation number', 'Call routed to available agent', 'IVR may capture initial info'], systems: ['Phone System', 'IVR'], roles: ['Customer'] },
-            'agent-assist': { icon: '🎧', type: 'agent', title: 'Agent Captures Requirements', phase: 'Booking Initiation', desc: 'Reservation agent gathers all trip details from the customer.', actions: ['Capture pickup location & time', 'Record destination address', 'Note passenger count & names', 'Identify special requirements', 'Check vehicle preferences'], systems: ['CRS'], roles: ['Reservation Agent'] },
-            'agent-quote': { icon: '💰', type: 'agent', title: 'Agent Provides Quote', phase: 'Booking Initiation', desc: 'Agent calculates and presents pricing to customer.', actions: ['System calculates rate', 'Agent reviews pricing', 'Presents quote to customer', 'Explains inclusions/exclusions'], systems: ['CRS', 'Pricing Engine'], roles: ['Reservation Agent'] },
-            'phone-confirm': { icon: '✅', type: 'customer', title: 'Customer Confirms Booking', phase: 'Booking Initiation', desc: 'Customer verbally confirms the booking and provides payment.', actions: ['Customer agrees to quote', 'Provides payment method', 'Agent processes payment', 'Booking confirmed verbally'], systems: ['CRS', 'Payment Gateway'], roles: ['Customer', 'Reservation Agent'] },
+            'agent-assist': { icon: '🎧', type: 'agent', title: 'Agent Captures Requirements', phase: 'Booking Initiation', desc: 'Reservation agent gathers all trip details from the customer.', actions: ['Capture pickup location & time', 'Record destination address', 'Note passenger count & names', 'Identify special requirements', 'Check vehicle preferences'], systems: ['CES'], roles: ['Reservation Agent'] },
+            'agent-quote': { icon: '💰', type: 'agent', title: 'Agent Provides Quote', phase: 'Booking Initiation', desc: 'Agent calculates and presents pricing to customer.', actions: ['System calculates rate', 'Agent reviews pricing', 'Presents quote to customer', 'Explains inclusions/exclusions'], systems: ['CES', 'Pricing Engine'], roles: ['Reservation Agent'] },
+            'phone-confirm': { icon: '✅', type: 'customer', title: 'Customer Confirms Booking', phase: 'Booking Initiation', desc: 'Customer verbally confirms the booking and provides payment.', actions: ['Customer agrees to quote', 'Provides payment method', 'Agent processes payment', 'Booking confirmed verbally'], systems: ['CES', 'Payment Gateway'], roles: ['Customer', 'Reservation Agent'] },
             'web-visit': { icon: '🌐', type: 'customer', title: 'Customer Visits Website', phase: 'Booking Initiation', desc: 'Customer accesses Carey website to make a reservation.', actions: ['Navigate to carey.com', 'Click "Book Now"', 'Select service type'], systems: ['Website'], roles: ['Customer'] },
             'web-form': { icon: '📝', type: 'customer', title: 'Enters Trip Details', phase: 'Booking Initiation', desc: 'Customer fills out online booking form with trip information.', actions: ['Enter pickup address', 'Enter destination', 'Select date and time', 'Choose vehicle type', 'Add passenger details'], systems: ['Website', 'Booking Engine'], roles: ['Customer'] },
             'web-quote': { icon: '⚡', type: 'system', title: 'System Generates Quote', phase: 'Booking Initiation', desc: 'System automatically calculates and displays pricing.', actions: ['Calculate distance/time', 'Apply rate rules', 'Check vehicle availability', 'Display quote to customer'], systems: ['Booking Engine', 'Pricing Engine'], roles: ['System'] },
-            'web-pay': { icon: '💳', type: 'customer', title: 'Customer Pays & Books', phase: 'Booking Initiation', desc: 'Customer completes payment and finalizes booking online.', actions: ['Review booking summary', 'Enter payment details', 'Submit payment', 'Receive confirmation'], systems: ['Payment Gateway', 'CRS'], roles: ['Customer'] },
+            'web-pay': { icon: '💳', type: 'customer', title: 'Customer Pays & Books', phase: 'Booking Initiation', desc: 'Customer completes payment and finalizes booking online.', actions: ['Review booking summary', 'Enter payment details', 'Submit payment', 'Receive confirmation'], systems: ['Payment Gateway', 'CES'], roles: ['Customer'] },
             'app-open': { icon: '📱', type: 'customer', title: 'Customer Opens App', phase: 'Booking Initiation', desc: 'Customer launches Carey mobile app to book a ride.', actions: ['Open Carey app', 'Log in or continue as guest', 'View booking options'], systems: ['Mobile App'], roles: ['Customer'] },
             'app-book': { icon: '📍', type: 'customer', title: 'Selects Pickup & Destination', phase: 'Booking Initiation', desc: 'Customer sets trip details in the app.', actions: ['Set pickup location (GPS or manual)', 'Enter destination', 'Select pickup time'], systems: ['Mobile App', 'Maps API'], roles: ['Customer'] },
-            'app-vehicle': { icon: '🚗', type: 'system', title: 'Shows Vehicle Options', phase: 'Booking Initiation', desc: 'App displays available vehicle types and pricing.', actions: ['Query availability', 'Calculate rates', 'Show vehicle options', 'Display ETAs'], systems: ['Mobile App', 'CRS'], roles: ['System'] },
+            'app-vehicle': { icon: '🚗', type: 'system', title: 'Shows Vehicle Options', phase: 'Booking Initiation', desc: 'App displays available vehicle types and pricing.', actions: ['Query availability', 'Calculate rates', 'Show vehicle options', 'Display ETAs'], systems: ['Mobile App', 'CES'], roles: ['System'] },
             'app-confirm': { icon: '✅', type: 'customer', title: 'Confirms & Pays', phase: 'Booking Initiation', desc: 'Customer selects vehicle and completes booking.', actions: ['Select vehicle type', 'Review total', 'Confirm payment method', 'Submit booking'], systems: ['Mobile App', 'Payment Gateway'], roles: ['Customer'] },
 
+            // Booking Platform Path
+            'groundspan-create': { icon: '🖥️', type: 'agent', title: 'Corporate Booker Creates Reservation', phase: 'Booking Initiation', desc: 'Corporate travel manager or booker creates a reservation in GroundSpan platform.', actions: ['Log into GroundSpan', 'Enter trip details', 'Select vehicle type', 'Add passenger information', 'Submit reservation'], systems: ['GroundSpan'], roles: ['Corporate Booker', 'Travel Manager'] },
+            'groundspan-transmit': { icon: '📡', type: 'system', title: 'Reservation Transmitted to Carey', phase: 'Booking Initiation', desc: 'GroundSpan transmits the reservation data to Carey systems via API integration.', actions: ['Reservation data packaged', 'API call to Carey', 'Data validation', 'Transmission confirmed'], systems: ['GroundSpan', 'API Integration', 'CES'], roles: ['System'] },
+            'groundspan-booking': { icon: '📁', type: 'system', title: 'Booking Created in CES', phase: 'Booking Initiation', desc: 'Carey system receives and creates the booking in CES.', actions: ['Receive reservation data', 'Validate information', 'Create booking record', 'Assign confirmation number'], systems: ['CES'], roles: ['System'] },
+            'groundspan-ack': { icon: '✅', type: 'system', title: 'Acknowledgment Sent to GroundSpan', phase: 'Booking Initiation', desc: 'Carey sends confirmation acknowledgment back to GroundSpan.', actions: ['Generate acknowledgment', 'Include confirmation number', 'Transmit to GroundSpan', 'Update booking status'], systems: ['CES', 'API Integration', 'GroundSpan'], roles: ['System'] },
+
             // Phase 2: Post-Booking
-            'res-created': { icon: '📁', type: 'system', title: 'Reservation Created in CRS', phase: 'Post-Booking', desc: 'Booking is officially recorded in Carey Reservation System.', actions: ['Generate confirmation number', 'Store all trip details', 'Log payment info', 'Trigger confirmation workflow'], systems: ['CRS'], roles: ['System'] },
-            'confirm-sent': { icon: '📧', type: 'system', title: 'Confirmation Sent to Customer', phase: 'Post-Booking', desc: 'Automated confirmation sent via email and/or SMS.', actions: ['Generate confirmation email', 'Include trip details', 'Attach receipt', 'Send SMS notification'], systems: ['CRS', 'Email System', 'SMS Gateway'], roles: ['System'] },
-            'service-type': { icon: '?', type: 'decision', title: 'In-House or Farm Out?', phase: 'Post-Booking', desc: 'System determines if trip will be serviced by Carey fleet or affiliate partner.', actions: ['Check geographic coverage', 'Assess fleet availability', 'Evaluate vehicle requirements', 'Route accordingly'], systems: ['CRS'], roles: ['System', 'Operations'] },
-            'assign-internal': { icon: '📋', type: 'ops', title: 'Assign to Carey Fleet', phase: 'Post-Booking', desc: 'Trip assigned to Carey\'s owned fleet for service.', actions: ['Select appropriate vehicle', 'Match driver availability', 'Confirm assignment', 'Update reservation'], systems: ['CRS', 'Dispatch System'], roles: ['Operations'] },
-            'assign-affiliate': { icon: '🤝', type: 'ops', title: 'Send to Affiliate Partner', phase: 'Post-Booking', desc: 'Trip farmed out to vetted affiliate partner in the network.', actions: ['Identify qualified affiliate', 'Send trip details', 'Await confirmation', 'Log partner assignment'], systems: ['CRS', 'Partner Portal'], roles: ['Operations'] },
-            'driver-assign': { icon: '👤', type: 'ops', title: 'Driver & Vehicle Assigned', phase: 'Post-Booking', desc: 'Specific driver and vehicle assigned to the reservation.', actions: ['Match driver to trip', 'Assign appropriate vehicle', 'Verify driver availability', 'Confirm assignment'], systems: ['CRS', 'Dispatch System'], roles: ['Dispatch'] },
-            'driver-notify': { icon: '🔔', type: 'system', title: 'Driver Notified via App', phase: 'Post-Booking', desc: 'Driver receives trip assignment through mobile app.', actions: ['Push notification sent', 'Trip details displayed', 'Driver acknowledges', 'Status updated'], systems: ['Driver App', 'CRS'], roles: ['System', 'Driver'] },
-            'pre-service': { icon: '📝', type: 'ops', title: 'Pre-Service Prep Complete', phase: 'Post-Booking', desc: 'All preparation completed before service day.', actions: ['Verify all details', 'Confirm driver assignment', 'Vehicle inspection scheduled', 'Special requests noted'], systems: ['CRS'], roles: ['Operations'] },
+            'res-created': { icon: '📁', type: 'system', title: 'Reservation Created in CES', phase: 'Post-Booking', desc: 'Booking is officially recorded in Carey Reservation System.', actions: ['Generate confirmation number', 'Store all trip details', 'Log payment info', 'Trigger confirmation workflow'], systems: ['CES'], roles: ['System'] },
+            'confirm-sent': { icon: '📧', type: 'system', title: 'Confirmation Sent to Customer', phase: 'Post-Booking', desc: 'Automated confirmation sent via email and/or SMS.', actions: ['Generate confirmation email', 'Include trip details', 'Attach receipt', 'Send SMS notification'], systems: ['CES', 'Email System', 'SMS Gateway'], roles: ['System'] },
+            'service-type': { icon: '?', type: 'decision', title: 'In-House or Farm Out?', phase: 'Post-Booking', desc: 'System determines if trip will be serviced by Carey fleet or affiliate partner.', actions: ['Check geographic coverage', 'Assess fleet availability', 'Evaluate vehicle requirements', 'Route accordingly'], systems: ['CES'], roles: ['System', 'Operations'] },
+            'assign-internal': { icon: '📋', type: 'ops', title: 'Assign to Carey Fleet', phase: 'Post-Booking', desc: 'Trip assigned to Carey\'s owned fleet for service.', actions: ['Select appropriate vehicle', 'Match driver availability', 'Confirm assignment', 'Update reservation'], systems: ['CES', 'Dispatch System'], roles: ['Operations'] },
+            'assign-affiliate': { icon: '🤝', type: 'ops', title: 'Send to Affiliate Partner', phase: 'Post-Booking', desc: 'Trip farmed out to vetted affiliate partner in the network.', actions: ['Identify qualified affiliate', 'Send trip details', 'Await confirmation', 'Log partner assignment'], systems: ['CES', 'Partner Portal'], roles: ['Operations'] },
+            'driver-assign': { icon: '👤', type: 'ops', title: 'Driver & Vehicle Assigned', phase: 'Post-Booking', desc: 'Specific driver and vehicle assigned to the reservation.', actions: ['Match driver to trip', 'Assign appropriate vehicle', 'Verify driver availability', 'Confirm assignment'], systems: ['CES', 'Dispatch System'], roles: ['Dispatch'] },
+            'driver-notify': { icon: '🔔', type: 'system', title: 'Driver Notified via App', phase: 'Post-Booking', desc: 'Driver receives trip assignment through mobile app.', actions: ['Push notification sent', 'Trip details displayed', 'Driver acknowledges', 'Status updated'], systems: ['Driver App', 'CES'], roles: ['System', 'Driver'] },
+            'pre-service': { icon: '📝', type: 'ops', title: 'Pre-Service Prep Complete', phase: 'Post-Booking', desc: 'All preparation completed before service day.', actions: ['Verify all details', 'Confirm driver assignment', 'Vehicle inspection scheduled', 'Special requests noted'], systems: ['CES'], roles: ['Operations'] },
+            '24hr-notify': { icon: '🔔', type: 'system', title: '24-Hour Notification Sent', phase: 'Post-Booking', desc: 'Automated notification sent to customer 24 hours before pickup.', actions: ['System triggers 24hr reminder', 'Send email notification', 'Send SMS notification', 'Include trip details and driver info'], systems: ['CES', 'Email System', 'SMS Gateway'], roles: ['System'] },
 
             // Phase 3: Day-of-Service
             'driver-enroute': { icon: '🚗', type: 'driver', title: 'Driver En Route to Pickup', phase: 'Day-of-Service', desc: 'Driver departs for pickup location.', actions: ['Driver starts trip in app', 'Navigation begins', 'Status changes to "En Route"', 'ETA calculated'], systems: ['Driver App', 'Navigation'], roles: ['Driver'] },
             'customer-notified': { icon: '📱', type: 'system', title: 'Customer Notified (ETA)', phase: 'Day-of-Service', desc: 'Customer receives notification that driver is on the way.', actions: ['Send push notification', 'Display driver details', 'Show live tracking', 'Provide ETA'], systems: ['Customer App', 'SMS Gateway'], roles: ['System'] },
             'driver-arrives': { icon: '📍', type: 'driver', title: 'Driver Arrives at Pickup', phase: 'Day-of-Service', desc: 'Driver reaches the pickup location.', actions: ['Mark arrival in app', 'Position vehicle appropriately', 'Prepare for passenger'], systems: ['Driver App'], roles: ['Driver'] },
-            'arrival-notify': { icon: '🔔', type: 'system', title: 'Arrival Notification Sent', phase: 'Day-of-Service', desc: 'Customer notified that driver has arrived.', actions: ['Send arrival alert', 'Include vehicle details', 'Provide driver contact'], systems: ['Customer App', 'SMS Gateway'], roles: ['System'] },
+            'on-location': { icon: '📌', type: 'system', title: 'On Location', phase: 'Day-of-Service', desc: 'Driver status updated to On Location, notifying all relevant parties.', actions: ['Driver marks on location', 'Status updated in system', 'Customer notified of arrival', 'Wait time begins'], systems: ['Driver App', 'CES', 'Customer App'], roles: ['Driver', 'System'] },
 
             // Phase 4: Service Execution
-            'passenger-aboard': { icon: '👤', type: 'ops', title: 'Passenger Ready for Pickup', phase: 'Service Execution', desc: 'System confirms passenger is ready and determines the appropriate pickup workflow.', actions: ['Confirm pickup time approaching', 'Verify passenger details', 'Check pickup location type', 'Route to appropriate workflow'], systems: ['CRS', 'Driver App'], roles: ['Operations', 'System'] },
-            'pickup-type': { icon: '✈️', type: 'decision', title: 'Airport or Non-Airport?', phase: 'Service Execution', desc: 'Workflow diverges based on pickup type - airport pickups have additional steps.', actions: ['Check pickup location type', 'Route to appropriate flow', 'Apply relevant procedures'], systems: ['CRS'], roles: ['System'] },
-            'flight-track': { icon: '📡', type: 'system', title: 'Flight Tracking Active', phase: 'Service Execution (Airport)', desc: 'System monitors flight status for airport pickups.', actions: ['Track flight via API', 'Monitor delays/early arrivals', 'Auto-adjust pickup time', 'Notify driver of changes'], systems: ['Flight Tracking API', 'CRS'], roles: ['System'] },
+            'passenger-aboard': { icon: '👤', type: 'ops', title: 'Passenger Ready for Pickup', phase: 'Service Execution', desc: 'System confirms passenger is ready and determines the appropriate pickup workflow.', actions: ['Confirm pickup time approaching', 'Verify passenger details', 'Check pickup location type', 'Route to appropriate workflow'], systems: ['CES', 'Driver App'], roles: ['Operations', 'System'] },
+            'pickup-type': { icon: '✈️', type: 'decision', title: 'Airport or Non-Airport?', phase: 'Service Execution', desc: 'Workflow diverges based on pickup type - airport pickups have additional steps.', actions: ['Check pickup location type', 'Route to appropriate flow', 'Apply relevant procedures'], systems: ['CES'], roles: ['System'] },
+            'flight-track': { icon: '📡', type: 'system', title: 'Flight Tracking Active', phase: 'Service Execution (Airport)', desc: 'System monitors flight status for airport pickups.', actions: ['Track flight via API', 'Monitor delays/early arrivals', 'Auto-adjust pickup time', 'Notify driver of changes'], systems: ['Flight Tracking API', 'CES'], roles: ['System'] },
             'flight-lands': { icon: '🛬', type: 'system', title: 'Flight Lands - Driver Notified', phase: 'Service Execution (Airport)', desc: 'Driver alerted when flight lands.', actions: ['Detect flight landing', 'Calculate deplane time', 'Send driver notification', 'Update ETA'], systems: ['Flight Tracking API', 'Driver App'], roles: ['System'] },
             'driver-position-airport': { icon: '🚗', type: 'driver', title: 'Driver Positions at Terminal', phase: 'Service Execution (Airport)', desc: 'Driver moves to designated pickup area at terminal.', actions: ['Navigate to correct terminal', 'Park in designated area', 'Prepare meet & greet sign', 'Update status'], systems: ['Driver App'], roles: ['Driver'] },
             'meet-greet': { icon: '🪧', type: 'driver', title: 'Meet & Greet with Sign', phase: 'Service Execution (Airport)', desc: 'Driver meets passenger in arrivals with name sign.', actions: ['Position at arrivals', 'Display passenger name sign', 'Watch for passenger', 'Make contact'], systems: ['Driver App'], roles: ['Driver'] },
@@ -1175,7 +1258,13 @@
             'trip-start': { icon: '▶️', type: 'driver', title: 'Trip Started in App', phase: 'Trip Execution', desc: 'Driver marks trip as started once passenger is aboard.', actions: ['Confirm passenger aboard', 'Start trip in app', 'Begin navigation', 'Timer starts'], systems: ['Driver App'], roles: ['Driver'] },
             'in-transit': { icon: '🚗', type: 'driver', title: 'In Transit to Destination', phase: 'Trip Execution', desc: 'Journey to destination in progress.', actions: ['Follow optimal route', 'Maintain safe driving', 'Handle any passenger requests', 'Monitor traffic'], systems: ['Driver App', 'Navigation'], roles: ['Driver'] },
             'arrive-dest': { icon: '📍', type: 'driver', title: 'Arrive at Destination', phase: 'Trip Execution', desc: 'Vehicle arrives at drop-off location.', actions: ['Navigate to exact address', 'Find safe stopping point', 'Prepare for drop-off'], systems: ['Driver App', 'Navigation'], roles: ['Driver'] },
-            'dropoff': { icon: '🏁', type: 'driver', title: 'Passenger Dropped Off', phase: 'Trip Execution (End)', desc: 'Trip complete - passenger exits vehicle. This is the process end point.', actions: ['Stop safely', 'Assist passenger exit', 'Unload any luggage', 'Thank passenger', 'Mark trip complete in app'], systems: ['Driver App', 'CRS'], roles: ['Driver'] }
+            'dropoff': { icon: '🏁', type: 'driver', title: 'Passenger Dropped Off', phase: 'Trip Execution', desc: 'Passenger exits vehicle at destination.', actions: ['Stop safely', 'Assist passenger exit', 'Unload any luggage', 'Thank passenger'], systems: ['Driver App'], roles: ['Driver'] },
+
+            // Phase 6: Billing
+            'eoj-entered': { icon: '📝', type: 'driver', title: 'EOJ Entered', phase: 'Billing', desc: 'Driver enters End of Job details including times, mileage, and extras.', actions: ['Enter actual pickup/drop-off times', 'Record mileage', 'Log extras (tolls, parking, wait time)', 'Submit EOJ'], systems: ['Driver App', 'CES'], roles: ['Driver'] },
+            'invoice-generated': { icon: '🧾', type: 'system', title: 'Invoice Generated & Sent', phase: 'Billing', desc: 'System calculates charges, generates invoice, and sends to customer.', actions: ['Calculate final charges', 'Generate itemized invoice', 'Send to customer via email/portal'], systems: ['CES', 'Billing System', 'Email System'], roles: ['System'] },
+            'payment-received': { icon: '💳', type: 'customer', title: 'Payment Received', phase: 'Billing', desc: 'Customer submits payment for the invoice.', actions: ['Customer reviews invoice', 'Submits payment', 'Payment processed'], systems: ['Payment Gateway', 'Billing System'], roles: ['Customer'] },
+            'trip-closed': { icon: '🏁', type: 'system', title: 'Trip Closed', phase: 'Billing (End)', desc: 'Trip fully closed in the system. Process complete.', actions: ['Mark trip as paid', 'Close billing record', 'Archive trip data'], systems: ['CES', 'Billing System'], roles: ['System'] }
         };
 
         function showDetail(id) {
