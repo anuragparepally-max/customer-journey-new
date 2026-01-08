@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carey | Reservation Workflow</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: #0c1220;
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 0% 0%, rgba(201, 169, 98, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 100% 100%, rgba(56, 189, 248, 0.04) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 24px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            background: rgba(12, 18, 32, 0.9);
+            backdrop-filter: blur(20px);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #c9a962, #e8d5a3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #0c1220;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #c9a962, #e8d5a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .header-title h1 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .header-title p {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Main */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 32px 40px 60px;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-dot.customer { background: linear-gradient(135deg, #f472b6, #ec4899); }
+        .legend-dot.agent { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
+        .legend-dot.system { background: linear-gradient(135deg, #34d399, #10b981); }
+        .legend-dot.ops { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+        .legend-dot.driver { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+        .legend-dot.decision { background: linear-gradient(135deg, #f87171, #ef4444); }
+
+        /* Phase */
+        .phase {
+            margin-bottom: 20px;
+        }
+
+        .phase-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 24px;
+            background: linear-gradient(90deg, rgba(201, 169, 98, 0.08), transparent);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .phase-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #c9a962, #b8943f);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #0c1220;
+        }
+
+        .phase-info h2 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .phase-info p {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .phase-content {
+            padding: 24px;
+        }
+
+        /* Flow Row */
+        .flow-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .flow-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .flow-row.centered {
+            justify-content: center;
+        }
+
+        /* Path Label */
+        .path-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+            margin-right: 8px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        /* Node */
+        .node {
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .node:hover {
+            transform: translateY(-4px);
+        }
+
+        .node-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid;
+            min-width: 150px;
+            max-width: 200px;
+            transition: all 0.25s ease;
+        }
+
+        .node:hover .node-box {
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
+
+        .node-box.customer {
+            background: linear-gradient(145deg, rgba(236, 72, 153, 0.12), rgba(236, 72, 153, 0.04));
+            border-color: rgba(236, 72, 153, 0.3);
+        }
+        .node:hover .node-box.customer { border-color: rgba(236, 72, 153, 0.6); }
+
+        .node-box.agent {
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.04));
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+        .node:hover .node-box.agent { border-color: rgba(139, 92, 246, 0.6); }
+
+        .node-box.system {
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.04));
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        .node:hover .node-box.system { border-color: rgba(16, 185, 129, 0.6); }
+
+        .node-box.ops {
+            background: linear-gradient(145deg, rgba(59, 130, 246, 0.12), rgba(59, 130, 246, 0.04));
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        .node:hover .node-box.ops { border-color: rgba(59, 130, 246, 0.6); }
+
+        .node-box.driver {
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.04));
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+        .node:hover .node-box.driver { border-color: rgba(245, 158, 11, 0.6); }
+
+        .node-box.endpoint {
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.05));
+            border-color: rgba(34, 197, 94, 0.5);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
+        }
+
+        .node-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .node-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #fff;
+            line-height: 1.35;
+        }
+
+        /* Decision Diamond */
+        .decision {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .decision:hover {
+            transform: scale(1.05);
+        }
+
+        .decision-diamond {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, rgba(248, 113, 113, 0.2), rgba(239, 68, 68, 0.1));
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            transform: rotate(45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+        }
+
+        .decision:hover .decision-diamond {
+            border-color: rgba(239, 68, 68, 0.8);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .decision-icon {
+            transform: rotate(-45deg);
+            font-size: 0.9rem;
+        }
+
+        .decision-label {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+            max-width: 80px;
+        }
+
+        /* Arrow */
+        .arrow {
+            color: rgba(201, 169, 98, 0.5);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .arrow-label {
+            font-size: 0.55rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-left: -6px;
+            margin-right: 2px;
+        }
+
+        .arrow-label.yes {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+        }
+
+        .arrow-label.no {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .arrow-label.airport {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+        }
+
+        .arrow-label.non-airport {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+        }
+
+        /* Branch */
+        .branch-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-left: 12px;
+        }
+
+        .branch-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Merge Indicator */
+        .merge-point {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(201, 169, 98, 0.1);
+            border: 1px dashed rgba(201, 169, 98, 0.3);
+            border-radius: 20px;
+            font-size: 0.65rem;
+            color: #c9a962;
+        }
+
+        /* Diverge Section */
+        .diverge-section {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .diverge-path {
+            flex: 1;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .diverge-path-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .diverge-path-icon {
+            font-size: 1.1rem;
+        }
+
+        .diverge-path-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .diverge-path-subtitle {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .diverge-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .diverge-flow .flow-row {
+            margin-bottom: 0;
+        }
+
+        /* Vertical connector in diverge */
+        .v-arrow {
+            display: flex;
+            justify-content: center;
+            padding: 4px 0;
+            color: rgba(201, 169, 98, 0.4);
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(12, 18, 32, 0.9);
+            backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 24px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.99));
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+            animation: modalIn 0.25s ease-out;
+        }
+
+        @keyframes modalIn {
+            from { transform: translateY(16px) scale(0.96); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .modal-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .modal-icon.customer { background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(236, 72, 153, 0.1)); }
+        .modal-icon.agent { background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1)); }
+        .modal-icon.system { background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1)); }
+        .modal-icon.ops { background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1)); }
+        .modal-icon.driver { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1)); }
+        .modal-icon.decision { background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1)); }
+
+        .modal-title h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .modal-title span {
+            font-size: 0.75rem;
+            color: #c9a962;
+        }
+
+        .modal-close {
+            margin-left: auto;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.5);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            max-height: calc(80vh - 100px);
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+        }
+
+        .detail-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-section h3 {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .detail-section p {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.7;
+        }
+
+        .detail-list {
+            list-style: none;
+        }
+
+        .detail-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .detail-list li:last-child {
+            border-bottom: none;
+        }
+
+        .detail-list li::before {
+            content: '→';
+            color: #c9a962;
+            font-weight: 600;
+        }
+
+        .detail-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .detail-tag {
+            font-size: 0.7rem;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .detail-tag.system { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+        .detail-tag.role { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: rgba(255,255,255,0.25);
+            font-size: 0.7rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .diverge-section {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .main-container {
+                padding: 20px;
+            }
+
+            .legend {
+                gap: 12px;
+            }
+
+            .flow-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+
+            .node-box {
+                min-width: 100%;
+                max-width: 100%;
+            }
+
+            .path-label {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+
+            .branch-container {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+    <div class="grid-overlay"></div>
+
+    <header class="header">
+        <div class="logo-group">
+            <div class="logo-icon">C</div>
+            <span class="logo-text">CAREY</span>
+        </div>
+        <div class="header-title">
+            <h1>Reservation Workflow</h1>
+            <p>Booking Initiation → Service Execution → Passenger Drop-off</p>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot customer"></div><span>Customer</span></div>
+            <div class="legend-item"><div class="legend-dot agent"></div><span>Agent</span></div>
+            <div class="legend-item"><div class="legend-dot system"></div><span>System</span></div>
+            <div class="legend-item"><div class="legend-dot ops"></div><span>Operations</span></div>
+            <div class="legend-item"><div class="legend-dot driver"></div><span>Driver</span></div>
+            <div class="legend-item"><div class="legend-dot decision"></div><span>Decision</span></div>
+        </div>
+
+        <!-- Phase 1: Booking Initiation -->
+        <div class="phase">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div class="phase-number">1</div>
+                    <div class="phase-info">
+                        <h2>Booking Initiation</h2>
+                        <p>Multiple paths converge to reservation creation</p>
+                    </div>
+                </div>
+                <div class="phase-content">
+                    <!-- Phone Path -->
+                    <div class="flow-row">
+                        <div class="path-label">📞 Phone</div>
+                        <div class="node" onclick="showDetail('phone-call')">
+                            <div class="node-box customer">
+                                <span class="node-icon">📞</span>
+                                <span class="node-label">Customer Calls Reservation Line</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('agent-assist')">
+                            <div class="node-box agent">
+                                <span class="node-icon">🎧</span>
+                                <span class="node-label">Agent Captures Requirements</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('agent-quote')">
+                            <div class="node-box agent">
+                                <span class="node-icon">💰</span>
+                                <span class="node-label">Agent Provides Quote</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('phone-confirm')">
+                            <div class="node-box customer">
+                                <span class="node-icon">✅</span>
+                                <span class="node-label">Customer Confirms Booking</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Website Path -->
+                    <div class="flow-row">
+                        <div class="path-label">🌐 Website</div>
+                        <div class="node" onclick="showDetail('web-visit')">
+                            <div class="node-box customer">
+                                <span class="node-icon">🌐</span>
+                                <span class="node-label">Customer Visits Website</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('web-form')">
+                            <div class="node-box customer">
+                                <span class="node-icon">📝</span>
+                                <span class="node-label">Enters Trip Details</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('web-quote')">
+                            <div class="node-box system">
+                                <span class="node-icon">⚡</span>
+                                <span class="node-label">System Generates Quote</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('web-pay')">
+                            <div class="node-box customer">
+                                <span class="node-icon">💳</span>
+                                <span class="node-label">Customer Pays & Books</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- App Path -->
+                    <div class="flow-row">
+                        <div class="path-label">📱 Mobile App</div>
+                        <div class="node" onclick="showDetail('app-open')">
+                            <div class="node-box customer">
+                                <span class="node-icon">📱</span>
+                                <span class="node-label">Customer Opens App</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('app-book')">
+                            <div class="node-box customer">
+                                <span class="node-icon">📍</span>
+                                <span class="node-label">Selects Pickup & Destination</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('app-vehicle')">
+                            <div class="node-box system">
+                                <span class="node-icon">🚗</span>
+                                <span class="node-label">Shows Vehicle Options</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('app-confirm')">
+                            <div class="node-box customer">
+                                <span class="node-icon">✅</span>
+                                <span class="node-label">Confirms & Pays</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Merge Point -->
+                    <div class="flow-row centered" style="margin-top: 20px;">
+                        <div class="merge-point">
+                            <span>↓</span>
+                            <span>All paths converge</span>
+                            <span>↓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 2: Post-Booking Handling -->
+        <div class="phase">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div class="phase-number">2</div>
+                    <div class="phase-info">
+                        <h2>Post-Booking Handling</h2>
+                        <p>Reservation creation, confirmation & internal handoffs</p>
+                    </div>
+                </div>
+                <div class="phase-content">
+                    <div class="flow-row">
+                        <div class="node" onclick="showDetail('res-created')">
+                            <div class="node-box system">
+                                <span class="node-icon">📁</span>
+                                <span class="node-label">Reservation Created in CRS</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('confirm-sent')">
+                            <div class="node-box system">
+                                <span class="node-icon">📧</span>
+                                <span class="node-label">Confirmation Sent to Customer</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="decision" onclick="showDetail('service-type')">
+                            <div class="decision-diamond">
+                                <span class="decision-icon">?</span>
+                            </div>
+                            <span class="decision-label">In-House or Farm Out?</span>
+                        </div>
+                        <div class="branch-container">
+                            <div class="branch-row">
+                                <span class="arrow-label yes">In-House</span>
+                                <span class="arrow">→</span>
+                                <div class="node" onclick="showDetail('assign-internal')">
+                                    <div class="node-box ops">
+                                        <span class="node-icon">📋</span>
+                                        <span class="node-label">Assign to Carey Fleet</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="branch-row">
+                                <span class="arrow-label no">Farm Out</span>
+                                <span class="arrow">→</span>
+                                <div class="node" onclick="showDetail('assign-affiliate')">
+                                    <div class="node-box ops">
+                                        <span class="node-icon">🤝</span>
+                                        <span class="node-label">Send to Affiliate Partner</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flow-row" style="margin-top: 20px;">
+                        <div class="merge-point"><span>↓</span></div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('driver-assign')">
+                            <div class="node-box ops">
+                                <span class="node-icon">👤</span>
+                                <span class="node-label">Driver & Vehicle Assigned</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('driver-notify')">
+                            <div class="node-box system">
+                                <span class="node-icon">🔔</span>
+                                <span class="node-label">Driver Notified via App</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('pre-service')">
+                            <div class="node-box ops">
+                                <span class="node-icon">📝</span>
+                                <span class="node-label">Pre-Service Prep Complete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 3: Day-of-Service -->
+        <div class="phase">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div class="phase-number">3</div>
+                    <div class="phase-info">
+                        <h2>Day-of-Service</h2>
+                        <p>Driver dispatch, positioning & communication touchpoints</p>
+                    </div>
+                </div>
+                <div class="phase-content">
+                    <div class="flow-row">
+                        <div class="node" onclick="showDetail('driver-enroute')">
+                            <div class="node-box driver">
+                                <span class="node-icon">🚗</span>
+                                <span class="node-label">Driver En Route to Pickup</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('customer-notified')">
+                            <div class="node-box system">
+                                <span class="node-icon">📱</span>
+                                <span class="node-label">Customer Notified (ETA)</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('driver-arrives')">
+                            <div class="node-box driver">
+                                <span class="node-icon">📍</span>
+                                <span class="node-label">Driver Arrives at Pickup</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('arrival-notify')">
+                            <div class="node-box system">
+                                <span class="node-icon">🔔</span>
+                                <span class="node-label">Arrival Notification Sent</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 4: Service Execution (Diverge) -->
+        <div class="phase">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div class="phase-number">4</div>
+                    <div class="phase-info">
+                        <h2>Service Execution</h2>
+                        <p>Workflow diverges based on pickup type</p>
+                    </div>
+                </div>
+                <div class="phase-content">
+                    <!-- Decision Point -->
+                    <div class="flow-row">
+                        <div class="node" onclick="showDetail('passenger-aboard')">
+                            <div class="node-box ops">
+                                <span class="node-icon">👤</span>
+                                <span class="node-label">Passenger Ready for Pickup</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="decision" onclick="showDetail('pickup-type')">
+                            <div class="decision-diamond">
+                                <span class="decision-icon">?</span>
+                            </div>
+                            <span class="decision-label">Pickup Type?</span>
+                        </div>
+                        <div class="branch-container">
+                            <div class="branch-row">
+                                <span class="arrow-label airport">✈️ Airport</span>
+                                <span class="arrow">→</span>
+                                <span style="font-size: 0.6rem; color: rgba(255,255,255,0.4);">See Airport Flow Below</span>
+                            </div>
+                            <div class="branch-row">
+                                <span class="arrow-label non-airport">🏢 Non-Airport</span>
+                                <span class="arrow">→</span>
+                                <span style="font-size: 0.6rem; color: rgba(255,255,255,0.4);">See Non-Airport Flow Below</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Airport Pickup Flow -->
+                    <div class="flow-row" style="margin-top: 28px;">
+                        <div class="path-label">✈️ Airport</div>
+                        <div class="node" onclick="showDetail('flight-track')">
+                            <div class="node-box system">
+                                <span class="node-icon">📡</span>
+                                <span class="node-label">Flight Tracking Active</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('flight-lands')">
+                            <div class="node-box system">
+                                <span class="node-icon">🛬</span>
+                                <span class="node-label">Flight Lands</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('driver-position-airport')">
+                            <div class="node-box driver">
+                                <span class="node-icon">🚗</span>
+                                <span class="node-label">Driver at Terminal</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('meet-greet')">
+                            <div class="node-box driver">
+                                <span class="node-icon">🪧</span>
+                                <span class="node-label">Meet & Greet</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('luggage')">
+                            <div class="node-box driver">
+                                <span class="node-icon">🧳</span>
+                                <span class="node-label">Luggage Assist</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Non-Airport Pickup Flow -->
+                    <div class="flow-row" style="margin-top: 16px;">
+                        <div class="path-label">🏢 Non-Airport</div>
+                        <div class="node" onclick="showDetail('driver-position-standard')">
+                            <div class="node-box driver">
+                                <span class="node-icon">🚗</span>
+                                <span class="node-label">Driver at Location</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('text-arrival')">
+                            <div class="node-box system">
+                                <span class="node-icon">💬</span>
+                                <span class="node-label">Text/Call Customer</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('curbside')">
+                            <div class="node-box driver">
+                                <span class="node-icon">🚘</span>
+                                <span class="node-label">Curbside Pickup</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('greet-passenger')">
+                            <div class="node-box driver">
+                                <span class="node-icon">👋</span>
+                                <span class="node-label">Greet Passenger</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Merge back -->
+                    <div class="flow-row centered" style="margin-top: 24px;">
+                        <div class="merge-point"><span>↓</span><span>Both paths converge to Trip Execution</span><span>↓</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 5: Trip & Drop-off -->
+        <div class="phase">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div class="phase-number">5</div>
+                    <div class="phase-info">
+                        <h2>Trip Execution & Drop-off</h2>
+                        <p>Journey completion - process end point</p>
+                    </div>
+                </div>
+                <div class="phase-content">
+                    <div class="flow-row">
+                        <div class="node" onclick="showDetail('trip-start')">
+                            <div class="node-box driver">
+                                <span class="node-icon">▶️</span>
+                                <span class="node-label">Trip Started in App</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('in-transit')">
+                            <div class="node-box driver">
+                                <span class="node-icon">🚗</span>
+                                <span class="node-label">In Transit to Destination</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('arrive-dest')">
+                            <div class="node-box driver">
+                                <span class="node-icon">📍</span>
+                                <span class="node-label">Arrive at Destination</span>
+                            </div>
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="node" onclick="showDetail('dropoff')">
+                            <div class="node-box endpoint">
+                                <span class="node-icon">🏁</span>
+                                <span class="node-label">Passenger Dropped Off</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">CAREY INTERNATIONAL · Reservation Workflow · Click any step for details</div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-icon" id="modalIcon">📞</div>
+                <div class="modal-title">
+                    <h2 id="modalTitle">Step Title</h2>
+                    <span id="modalPhase">Phase</span>
+                </div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        const steps = {
+            // Phase 1: Booking Initiation
+            'phone-call': { icon: '📞', type: 'customer', title: 'Customer Calls Reservation Line', phase: 'Booking Initiation', desc: 'Customer initiates booking by calling Carey\'s reservation hotline or VIP line.', actions: ['Customer dials reservation number', 'Call routed to available agent', 'IVR may capture initial info'], systems: ['Phone System', 'IVR'], roles: ['Customer'] },
+            'agent-assist': { icon: '🎧', type: 'agent', title: 'Agent Captures Requirements', phase: 'Booking Initiation', desc: 'Reservation agent gathers all trip details from the customer.', actions: ['Capture pickup location & time', 'Record destination address', 'Note passenger count & names', 'Identify special requirements', 'Check vehicle preferences'], systems: ['CRS'], roles: ['Reservation Agent'] },
+            'agent-quote': { icon: '💰', type: 'agent', title: 'Agent Provides Quote', phase: 'Booking Initiation', desc: 'Agent calculates and presents pricing to customer.', actions: ['System calculates rate', 'Agent reviews pricing', 'Presents quote to customer', 'Explains inclusions/exclusions'], systems: ['CRS', 'Pricing Engine'], roles: ['Reservation Agent'] },
+            'phone-confirm': { icon: '✅', type: 'customer', title: 'Customer Confirms Booking', phase: 'Booking Initiation', desc: 'Customer verbally confirms the booking and provides payment.', actions: ['Customer agrees to quote', 'Provides payment method', 'Agent processes payment', 'Booking confirmed verbally'], systems: ['CRS', 'Payment Gateway'], roles: ['Customer', 'Reservation Agent'] },
+            'web-visit': { icon: '🌐', type: 'customer', title: 'Customer Visits Website', phase: 'Booking Initiation', desc: 'Customer accesses Carey website to make a reservation.', actions: ['Navigate to carey.com', 'Click "Book Now"', 'Select service type'], systems: ['Website'], roles: ['Customer'] },
+            'web-form': { icon: '📝', type: 'customer', title: 'Enters Trip Details', phase: 'Booking Initiation', desc: 'Customer fills out online booking form with trip information.', actions: ['Enter pickup address', 'Enter destination', 'Select date and time', 'Choose vehicle type', 'Add passenger details'], systems: ['Website', 'Booking Engine'], roles: ['Customer'] },
+            'web-quote': { icon: '⚡', type: 'system', title: 'System Generates Quote', phase: 'Booking Initiation', desc: 'System automatically calculates and displays pricing.', actions: ['Calculate distance/time', 'Apply rate rules', 'Check vehicle availability', 'Display quote to customer'], systems: ['Booking Engine', 'Pricing Engine'], roles: ['System'] },
+            'web-pay': { icon: '💳', type: 'customer', title: 'Customer Pays & Books', phase: 'Booking Initiation', desc: 'Customer completes payment and finalizes booking online.', actions: ['Review booking summary', 'Enter payment details', 'Submit payment', 'Receive confirmation'], systems: ['Payment Gateway', 'CRS'], roles: ['Customer'] },
+            'app-open': { icon: '📱', type: 'customer', title: 'Customer Opens App', phase: 'Booking Initiation', desc: 'Customer launches Carey mobile app to book a ride.', actions: ['Open Carey app', 'Log in or continue as guest', 'View booking options'], systems: ['Mobile App'], roles: ['Customer'] },
+            'app-book': { icon: '📍', type: 'customer', title: 'Selects Pickup & Destination', phase: 'Booking Initiation', desc: 'Customer sets trip details in the app.', actions: ['Set pickup location (GPS or manual)', 'Enter destination', 'Select pickup time'], systems: ['Mobile App', 'Maps API'], roles: ['Customer'] },
+            'app-vehicle': { icon: '🚗', type: 'system', title: 'Shows Vehicle Options', phase: 'Booking Initiation', desc: 'App displays available vehicle types and pricing.', actions: ['Query availability', 'Calculate rates', 'Show vehicle options', 'Display ETAs'], systems: ['Mobile App', 'CRS'], roles: ['System'] },
+            'app-confirm': { icon: '✅', type: 'customer', title: 'Confirms & Pays', phase: 'Booking Initiation', desc: 'Customer selects vehicle and completes booking.', actions: ['Select vehicle type', 'Review total', 'Confirm payment method', 'Submit booking'], systems: ['Mobile App', 'Payment Gateway'], roles: ['Customer'] },
+
+            // Phase 2: Post-Booking
+            'res-created': { icon: '📁', type: 'system', title: 'Reservation Created in CRS', phase: 'Post-Booking', desc: 'Booking is officially recorded in Carey Reservation System.', actions: ['Generate confirmation number', 'Store all trip details', 'Log payment info', 'Trigger confirmation workflow'], systems: ['CRS'], roles: ['System'] },
+            'confirm-sent': { icon: '📧', type: 'system', title: 'Confirmation Sent to Customer', phase: 'Post-Booking', desc: 'Automated confirmation sent via email and/or SMS.', actions: ['Generate confirmation email', 'Include trip details', 'Attach receipt', 'Send SMS notification'], systems: ['CRS', 'Email System', 'SMS Gateway'], roles: ['System'] },
+            'service-type': { icon: '?', type: 'decision', title: 'In-House or Farm Out?', phase: 'Post-Booking', desc: 'System determines if trip will be serviced by Carey fleet or affiliate partner.', actions: ['Check geographic coverage', 'Assess fleet availability', 'Evaluate vehicle requirements', 'Route accordingly'], systems: ['CRS'], roles: ['System', 'Operations'] },
+            'assign-internal': { icon: '📋', type: 'ops', title: 'Assign to Carey Fleet', phase: 'Post-Booking', desc: 'Trip assigned to Carey\'s owned fleet for service.', actions: ['Select appropriate vehicle', 'Match driver availability', 'Confirm assignment', 'Update reservation'], systems: ['CRS', 'Dispatch System'], roles: ['Operations'] },
+            'assign-affiliate': { icon: '🤝', type: 'ops', title: 'Send to Affiliate Partner', phase: 'Post-Booking', desc: 'Trip farmed out to vetted affiliate partner in the network.', actions: ['Identify qualified affiliate', 'Send trip details', 'Await confirmation', 'Log partner assignment'], systems: ['CRS', 'Partner Portal'], roles: ['Operations'] },
+            'driver-assign': { icon: '👤', type: 'ops', title: 'Driver & Vehicle Assigned', phase: 'Post-Booking', desc: 'Specific driver and vehicle assigned to the reservation.', actions: ['Match driver to trip', 'Assign appropriate vehicle', 'Verify driver availability', 'Confirm assignment'], systems: ['CRS', 'Dispatch System'], roles: ['Dispatch'] },
+            'driver-notify': { icon: '🔔', type: 'system', title: 'Driver Notified via App', phase: 'Post-Booking', desc: 'Driver receives trip assignment through mobile app.', actions: ['Push notification sent', 'Trip details displayed', 'Driver acknowledges', 'Status updated'], systems: ['Driver App', 'CRS'], roles: ['System', 'Driver'] },
+            'pre-service': { icon: '📝', type: 'ops', title: 'Pre-Service Prep Complete', phase: 'Post-Booking', desc: 'All preparation completed before service day.', actions: ['Verify all details', 'Confirm driver assignment', 'Vehicle inspection scheduled', 'Special requests noted'], systems: ['CRS'], roles: ['Operations'] },
+
+            // Phase 3: Day-of-Service
+            'driver-enroute': { icon: '🚗', type: 'driver', title: 'Driver En Route to Pickup', phase: 'Day-of-Service', desc: 'Driver departs for pickup location.', actions: ['Driver starts trip in app', 'Navigation begins', 'Status changes to "En Route"', 'ETA calculated'], systems: ['Driver App', 'Navigation'], roles: ['Driver'] },
+            'customer-notified': { icon: '📱', type: 'system', title: 'Customer Notified (ETA)', phase: 'Day-of-Service', desc: 'Customer receives notification that driver is on the way.', actions: ['Send push notification', 'Display driver details', 'Show live tracking', 'Provide ETA'], systems: ['Customer App', 'SMS Gateway'], roles: ['System'] },
+            'driver-arrives': { icon: '📍', type: 'driver', title: 'Driver Arrives at Pickup', phase: 'Day-of-Service', desc: 'Driver reaches the pickup location.', actions: ['Mark arrival in app', 'Position vehicle appropriately', 'Prepare for passenger'], systems: ['Driver App'], roles: ['Driver'] },
+            'arrival-notify': { icon: '🔔', type: 'system', title: 'Arrival Notification Sent', phase: 'Day-of-Service', desc: 'Customer notified that driver has arrived.', actions: ['Send arrival alert', 'Include vehicle details', 'Provide driver contact'], systems: ['Customer App', 'SMS Gateway'], roles: ['System'] },
+
+            // Phase 4: Service Execution
+            'passenger-aboard': { icon: '👤', type: 'ops', title: 'Passenger Ready for Pickup', phase: 'Service Execution', desc: 'System confirms passenger is ready and determines the appropriate pickup workflow.', actions: ['Confirm pickup time approaching', 'Verify passenger details', 'Check pickup location type', 'Route to appropriate workflow'], systems: ['CRS', 'Driver App'], roles: ['Operations', 'System'] },
+            'pickup-type': { icon: '✈️', type: 'decision', title: 'Airport or Non-Airport?', phase: 'Service Execution', desc: 'Workflow diverges based on pickup type - airport pickups have additional steps.', actions: ['Check pickup location type', 'Route to appropriate flow', 'Apply relevant procedures'], systems: ['CRS'], roles: ['System'] },
+            'flight-track': { icon: '📡', type: 'system', title: 'Flight Tracking Active', phase: 'Service Execution (Airport)', desc: 'System monitors flight status for airport pickups.', actions: ['Track flight via API', 'Monitor delays/early arrivals', 'Auto-adjust pickup time', 'Notify driver of changes'], systems: ['Flight Tracking API', 'CRS'], roles: ['System'] },
+            'flight-lands': { icon: '🛬', type: 'system', title: 'Flight Lands - Driver Notified', phase: 'Service Execution (Airport)', desc: 'Driver alerted when flight lands.', actions: ['Detect flight landing', 'Calculate deplane time', 'Send driver notification', 'Update ETA'], systems: ['Flight Tracking API', 'Driver App'], roles: ['System'] },
+            'driver-position-airport': { icon: '🚗', type: 'driver', title: 'Driver Positions at Terminal', phase: 'Service Execution (Airport)', desc: 'Driver moves to designated pickup area at terminal.', actions: ['Navigate to correct terminal', 'Park in designated area', 'Prepare meet & greet sign', 'Update status'], systems: ['Driver App'], roles: ['Driver'] },
+            'meet-greet': { icon: '🪧', type: 'driver', title: 'Meet & Greet with Sign', phase: 'Service Execution (Airport)', desc: 'Driver meets passenger in arrivals with name sign.', actions: ['Position at arrivals', 'Display passenger name sign', 'Watch for passenger', 'Make contact'], systems: ['Driver App'], roles: ['Driver'] },
+            'luggage': { icon: '🧳', type: 'driver', title: 'Assist with Luggage', phase: 'Service Execution (Airport)', desc: 'Driver helps passenger with baggage.', actions: ['Offer luggage assistance', 'Escort to vehicle', 'Load luggage', 'Ensure nothing left behind'], systems: [], roles: ['Driver'] },
+            'driver-position-standard': { icon: '🚗', type: 'driver', title: 'Driver Arrives at Location', phase: 'Service Execution (Non-Airport)', desc: 'Driver arrives at non-airport pickup location.', actions: ['Navigate to address', 'Find appropriate parking', 'Mark arrival in app'], systems: ['Driver App', 'Navigation'], roles: ['Driver'] },
+            'text-arrival': { icon: '💬', type: 'system', title: 'Text/Call Customer', phase: 'Service Execution (Non-Airport)', desc: 'Driver contacts customer upon arrival.', actions: ['Send arrival text', 'Call if no response', 'Confirm exact location', 'Wait for passenger'], systems: ['Driver App', 'SMS'], roles: ['Driver', 'System'] },
+            'curbside': { icon: '🚘', type: 'driver', title: 'Curbside Pickup', phase: 'Service Execution (Non-Airport)', desc: 'Driver picks up passenger at curb.', actions: ['Position at entrance', 'Watch for passenger', 'Flash lights if needed', 'Prepare to assist'], systems: ['Driver App'], roles: ['Driver'] },
+            'greet-passenger': { icon: '👋', type: 'driver', title: 'Greet Passenger', phase: 'Service Execution (Non-Airport)', desc: 'Driver greets passenger and assists as needed.', actions: ['Professional greeting', 'Confirm identity', 'Assist with items', 'Open door'], systems: [], roles: ['Driver'] },
+
+            // Phase 5: Trip & Drop-off
+            'trip-start': { icon: '▶️', type: 'driver', title: 'Trip Started in App', phase: 'Trip Execution', desc: 'Driver marks trip as started once passenger is aboard.', actions: ['Confirm passenger aboard', 'Start trip in app', 'Begin navigation', 'Timer starts'], systems: ['Driver App'], roles: ['Driver'] },
+            'in-transit': { icon: '🚗', type: 'driver', title: 'In Transit to Destination', phase: 'Trip Execution', desc: 'Journey to destination in progress.', actions: ['Follow optimal route', 'Maintain safe driving', 'Handle any passenger requests', 'Monitor traffic'], systems: ['Driver App', 'Navigation'], roles: ['Driver'] },
+            'arrive-dest': { icon: '📍', type: 'driver', title: 'Arrive at Destination', phase: 'Trip Execution', desc: 'Vehicle arrives at drop-off location.', actions: ['Navigate to exact address', 'Find safe stopping point', 'Prepare for drop-off'], systems: ['Driver App', 'Navigation'], roles: ['Driver'] },
+            'dropoff': { icon: '🏁', type: 'driver', title: 'Passenger Dropped Off', phase: 'Trip Execution (End)', desc: 'Trip complete - passenger exits vehicle. This is the process end point.', actions: ['Stop safely', 'Assist passenger exit', 'Unload any luggage', 'Thank passenger', 'Mark trip complete in app'], systems: ['Driver App', 'CRS'], roles: ['Driver'] }
+        };
+
+        function showDetail(id) {
+            const s = steps[id];
+            if (!s) return;
+            document.getElementById('modalIcon').textContent = s.icon;
+            document.getElementById('modalIcon').className = 'modal-icon ' + s.type;
+            document.getElementById('modalTitle').textContent = s.title;
+            document.getElementById('modalPhase').textContent = s.phase;
+            document.getElementById('modalBody').innerHTML = `
+                <div class="detail-section"><h3>Description</h3><p>${s.desc}</p></div>
+                <div class="detail-section"><h3>Actions</h3><ul class="detail-list">${s.actions.map(a=>`<li>${a}</li>`).join('')}</ul></div>
+                <div class="detail-section"><h3>Systems & Roles</h3><div class="detail-tags">${s.systems.map(x=>`<span class="detail-tag system">${x}</span>`).join('')}${s.roles.map(x=>`<span class="detail-tag role">${x}</span>`).join('')}</div></div>
+            `;
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    </script>
+</body>
+</html>
